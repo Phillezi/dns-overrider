@@ -14,14 +14,14 @@ func (h *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	for _, question := range r.Question {
 		fmt.Printf("Received query: %s\n", question.Name)
 
-		ip, ok := CustomDNSMap[question.Name]
+		ip, ok := h.app.CustomDNSMap[question.Name]
 		if ok {
 			fmt.Println("Domain found in custom DNS map")
 			answers := createARecord(question.Name, ip)
 			msg.Answer = append(msg.Answer, answers...)
 		} else {
 			fmt.Println("Domain not found in custom DNS map. Fetching from External DNS.")
-			answers, err := fetchFromExternalDNS(question.Name)
+			answers, err := fetchFromExternalDNS(question.Name, h.app)
 			if err != nil {
 				fmt.Println("Failed to fetch from External DNS:", err)
 				answers := createNXDOMAINRecord(question.Name)
@@ -53,11 +53,11 @@ func createNXDOMAINRecord(name string) []dns.RR {
 	return []dns.RR{rr}
 }
 
-func fetchFromExternalDNS(name string) ([]dns.RR, error) {
+func fetchFromExternalDNS(name string, app *app) ([]dns.RR, error) {
 	c := new(dns.Client)
 	m := new(dns.Msg)
 	m.SetQuestion(name, dns.TypeA)
-	r, _, err := c.Exchange(m, ExternalDNSProvider+":53")
+	r, _, err := c.Exchange(m, app.ExternalDNSProvider+":53")
 	if err != nil {
 		return nil, err
 	}
