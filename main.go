@@ -7,15 +7,17 @@ import (
 )
 
 var CustomDNSMap = make(map[string]string)
+var ExternalDNSProvider = "8.8.8.8"
 
 type dnsHandler struct{}
 
 func main() {
-	if err := loadCustomDNSMapFromFile("override.conf"); err != nil {
+	if err := loadConfigFromFile("override.conf"); err != nil {
 		fmt.Printf("Error loading custom DNS mappings: %v\n", err)
 		return
 	}
 
+	fmt.Println("External DNS Provider: " + ExternalDNSProvider)
 	fmt.Println(CustomDNSMap)
 
 	handler := new(dnsHandler)

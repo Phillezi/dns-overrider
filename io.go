@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func loadCustomDNSMapFromFile(filename string) error {
+func loadConfigFromFile(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
 		return err
@@ -20,7 +20,12 @@ func loadCustomDNSMapFromFile(filename string) error {
 		if len(parts) == 2 {
 			domain := strings.TrimSpace(parts[0]) + "."
 			ip := strings.TrimSpace(parts[1])
-			CustomDNSMap[domain] = ip
+			if domain != "@externalDNS." {
+				CustomDNSMap[domain] = ip
+			} else {
+				ExternalDNSProvider = ip
+			}
+
 		}
 	}
 
