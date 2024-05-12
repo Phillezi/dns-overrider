@@ -2,6 +2,8 @@
 
 DNS Overrider is a tool that allows you to override DNS settings locally and set your own DNS records. It's particularly useful for development purposes when you need to test DNS configurations or simulate specific DNS responses.
 
+Uses [miekg/dns](https://github.com/miekg/dns) dns library.
+
 ## Features
 
 - Override DNS settings locally
