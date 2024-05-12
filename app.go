@@ -1,6 +1,11 @@
 package main
 
-import "github.com/miekg/dns"
+import (
+	"log"
+	"os"
+
+	"github.com/miekg/dns"
+)
 
 type dnsHandler struct{ *app }
 type app struct {
@@ -8,11 +13,19 @@ type app struct {
 	ExternalDNSProvider string
 	Handler             *dnsHandler
 	Server              *dns.Server
+	Queries             *log.Logger
+	Info                *log.Logger
+	Error               *log.Logger
+	Warn                *log.Logger
 }
 
 func (a *app) initialize() error {
 	a.ExternalDNSProvider = "8.8.8.8"
 	a.CustomDNSMap = make(map[string]string)
+	a.Queries = log.New(os.Stdout, "QUERY: ", log.Ldate|log.Ltime|log.Lshortfile)
+	a.Info = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	a.Error = log.New(os.Stdout, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	a.Warn = log.New(os.Stdout, "WARN: ", log.Ldate|log.Ltime|log.Lshortfile)
 	a.Handler = new(dnsHandler)
 	a.Handler.app = a
 	a.Server = &dns.Server{
