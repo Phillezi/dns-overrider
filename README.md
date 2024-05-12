@@ -25,12 +25,13 @@ sudo ./dns-overrider # needs to be run with root to bind port 53
 
 ## Configuration
 
-DNS Overrider can be configured using a configuration file (e.g., `override.conf`). Here's an example configuration file:
+DNS Overrider can be configured using the configuration file `override.conf`. Here's an example configuration file:
 
 ```conf
 @externalDNS: 8.8.8.8
 example.com: 127.0.0.1
 example2.com: 192.168.0.1
+example3.com: 192.168.0.2
 ```
 
 ## Contributing
