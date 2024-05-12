@@ -7,8 +7,7 @@ Uses [miekg/dns](https://github.com/miekg/dns) dns library.
 ## Features
 
 - Override DNS settings locally
-- Set custom DNS records
-- Useful for development and testing purposes
+- Useful for development and testing purposes to simulate domain names
 
 ## Prerequisites
 - Go
