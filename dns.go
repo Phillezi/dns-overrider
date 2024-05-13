@@ -17,8 +17,15 @@ func (h *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 		ip, ok := h.app.CustomDNSMap[question.Name]
 		if ok {
 			h.app.Info.Println("Domain found in custom DNS map")
-			answers := createARecord(question.Name, ip, h.app)
-			msg.Answer = append(msg.Answer, answers...)
+			cacheResponse, exists := h.app.DNSResponses[question.Name]
+			if exists {
+				h.app.Info.Println("Domain response found in cache")
+				msg.Answer = append(msg.Answer, cacheResponse.Answer...)
+			} else {
+				answers := createARecord(question.Name, ip, h.app)
+				msg.Answer = append(msg.Answer, answers...)
+				h.app.DNSResponses[question.Name] = *msg
+			}
 		} else {
 			h.app.Info.Println("Domain not found in custom DNS map. Fetching from External DNS.")
 			answers, err := fetchFromExternalDNS(question.Name, h.app)
