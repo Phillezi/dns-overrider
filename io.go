@@ -72,7 +72,14 @@ func loadBlocklist(filename string, app *app) error {
 		if len(parts) == 2 {
 			domain := strings.TrimSpace(parts[1]) + "."
 			ip := strings.TrimSpace(parts[0])
-			app.CustomDNSMap[domain] = ip
+			if domain != "." {
+				app.CustomDNSMap[domain] = ip
+			}
+		} else if len(parts) == 1 {
+			domain := strings.TrimSpace(parts[0]) + "."
+			if domain != "." {
+				app.CustomDNSMap[domain] = "0.0.0.0"
+			}
 		}
 	}
 	if err := scanner.Err(); err != nil {
