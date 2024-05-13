@@ -18,11 +18,13 @@ type app struct {
 	Error               *log.Logger
 	Warn                *log.Logger
 	BlockLists          []string
+	DNSResponses        map[string]dns.Msg
 }
 
 func (a *app) initialize() error {
 	a.ExternalDNSProvider = "8.8.8.8"
 	a.CustomDNSMap = make(map[string]string)
+	a.DNSResponses = make(map[string]dns.Msg)
 	a.Queries = log.New(os.Stdout, "QUERY: ", log.Ldate|log.Ltime|log.Lshortfile)
 	a.Info = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 	a.Error = log.New(os.Stdout, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
