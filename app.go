@@ -17,6 +17,7 @@ type app struct {
 	Info                *log.Logger
 	Error               *log.Logger
 	Warn                *log.Logger
+	BlockLists          []string
 }
 
 func (a *app) initialize() error {
